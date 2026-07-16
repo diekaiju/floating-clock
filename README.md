@@ -84,3 +84,14 @@ npm start
    - **Drag**: Click and hold the grab icon (six dots) or any portion of the title bar to move the widget.
    - **Lock Position**: Click the padlock button in the action bar. The widget locks in place, turning off dragging so you don't accidentally move it.
    - **Stopwatch Laps**: Recording a lap dynamically expands the widget height to display the lap log. Pressing reset automatically shrinks the widget back to its compact size.
+
+## Donate
+
+If you like Floating clock, you're welcome to send a donation. Floating clock is vibe coded in my free time bringing you the best user experience.
+
+## Buy me a coffee
+
+If you want to support the developer:
+
+ [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/diekaiju)
+
