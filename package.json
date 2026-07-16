@@ -1,0 +1,13 @@
+{
+  "name": "floating-clock",
+  "version": "1.0.0",
+  "description": "A floating clock application with countdown timer and stopwatch features.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . --ozone-platform=x11 --enable-logging"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}
