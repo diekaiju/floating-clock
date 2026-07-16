@@ -4,10 +4,30 @@
   "description": "A floating clock application with countdown timer and stopwatch features.",
   "main": "main.js",
   "scripts": {
-    "start": "electron . --ozone-platform=x11 --enable-logging"
+    "start": "electron . --ozone-platform=x11 --enable-logging",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "dependencies": {},
   "devDependencies": {
-    "electron": "^31.0.0"
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.antigravity.floating-clock",
+    "productName": "Floating Clock",
+    "files": [
+      "main.js",
+      "preload.js",
+      "assets/**/*",
+      "renderer/**/*"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility"
+    }
   }
 }
