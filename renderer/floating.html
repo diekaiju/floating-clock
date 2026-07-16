@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Floating Widget</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="floating.css">
+</head>
+<body>
+  <div class="widget-card" id="widget-card">
+    
+    <!-- Animated wave background -->
+    <div class="wave-container" id="wave-container">
+      <svg class="wave-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M 0 60 Q 25 50, 50 60 T 100 60 L 100 100 L 0 100 Z" fill="var(--theme-color)" class="floating-wave-bg" id="wave-path-bg" />
+        <path d="M 0 60 Q 25 70, 50 60 T 100 60 L 100 100 L 0 100 Z" fill="var(--theme-color)" opacity="0.45" class="floating-wave-fg" id="wave-path-fg" />
+      </svg>
+    </div>
+
+    <!-- Top Action bar (Fades in on hover) -->
+    <div class="action-bar">
+      <!-- Drag handle indicator -->
+      <div class="drag-handle">
+        <svg viewBox="0 0 24 24" width="16" height="16">
+          <circle cx="9" cy="5" r="1.5" fill="currentColor"/>
+          <circle cx="15" cy="5" r="1.5" fill="currentColor"/>
+          <circle cx="9" cy="12" r="1.5" fill="currentColor"/>
+          <circle cx="15" cy="12" r="1.5" fill="currentColor"/>
+          <circle cx="9" cy="19" r="1.5" fill="currentColor"/>
+          <circle cx="15" cy="19" r="1.5" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <div class="window-title" id="window-title">Widget</div>
+
+      <div class="bar-controls">
+        <button class="control-btn" id="lock-btn" title="Toggle Drag Lock">
+          <svg viewBox="0 0 24 24" width="12" height="12" id="lock-icon">
+            <!-- Unlocked state icon by default -->
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M7 11V7a5 5 0 0 1 9.9-1" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="control-btn close-btn" id="close-btn" title="Close Widget">&times;</button>
+      </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="widget-content">
+      
+      <!-- SIMPLE CLOCK VIEW -->
+      <div class="view-panel" id="clock-view">
+        <div class="digital-clock" id="clock-display">00:00:00</div>
+        <div class="date-display" id="date-display">Thursday, July 16</div>
+      </div>
+
+      <!-- COUNTDOWN TIMER VIEW -->
+      <div class="view-panel hidden" id="timer-view">
+        <!-- Setup/Edit state -->
+        <div class="timer-setup" id="timer-setup">
+          <div class="timer-inputs">
+            <div class="input-col">
+              <input type="number" id="timer-hr" min="0" max="99" value="0" placeholder="00">
+              <span>H</span>
+            </div>
+            <div class="input-colon">:</div>
+            <div class="input-col">
+              <input type="number" id="timer-min" min="0" max="59" value="5" placeholder="00">
+              <span>M</span>
+            </div>
+            <div class="input-colon">:</div>
+            <div class="input-col">
+              <input type="number" id="timer-sec" min="0" max="59" value="0" placeholder="00">
+              <span>S</span>
+            </div>
+          </div>
+          <button class="start-timer-btn" id="timer-start-btn">Start</button>
+        </div>
+
+        <!-- Counting/Active state -->
+        <div class="timer-run hidden" id="timer-run">
+          <div class="timer-display" id="timer-display">00:05:00</div>
+          <div class="timer-actions">
+            <button class="action-circle-btn" id="timer-pause-btn" title="Pause/Resume">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+              </svg>
+            </button>
+            <button class="action-circle-btn" id="timer-add-btn" title="+1 Minute">+1m</button>
+            <button class="action-circle-btn reset" id="timer-reset-btn" title="Reset">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M2.5 2v6h6M21.5 22v-6h-6"/>
+                <path d="M22 11.5A10 10 0 0 0 9.5 3L3 8.5M2 12.5a10 10 0 0 0 12.5 8.5L21 15.5"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STOPWATCH VIEW -->
+      <div class="view-panel hidden" id="stopwatch-view">
+        <div class="stopwatch-container">
+          <div class="stopwatch-display">
+            <span id="sw-main">00:00:00</span><span id="sw-ms">.00</span>
+          </div>
+          
+          <div class="stopwatch-actions">
+            <!-- Lap button -->
+            <button class="action-circle-btn" id="sw-lap-btn" title="Lap">Lap</button>
+            <!-- Play/Pause -->
+            <button class="action-circle-btn" id="sw-start-btn" title="Start">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" id="sw-start-icon">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </button>
+            <!-- Reset -->
+            <button class="action-circle-btn reset" id="sw-reset-btn" title="Reset">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M2.5 2v6h6M21.5 22v-6h-6"/>
+                <path d="M22 11.5A10 10 0 0 0 9.5 3L3 8.5M2 12.5a10 10 0 0 0 12.5 8.5L21 15.5"/>
+              </svg>
+            </button>
+          </div>
+          
+          <!-- Laps slide container -->
+          <div class="lap-container hidden" id="sw-laps-box">
+            <div class="laps-header">
+              <span>Lap</span>
+              <span>Split Time</span>
+            </div>
+            <div class="laps-list" id="sw-laps-list">
+              <!-- Lap items injected here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Audio elements for alarm -->
+  <audio id="alarm-sound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-84.wav" preload="auto"></audio>
+  <script src="floating.js"></script>
+</body>
+</html>

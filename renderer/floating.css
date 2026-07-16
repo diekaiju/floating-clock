@@ -1,0 +1,477 @@
+:root {
+  --bg-color-raw: 18, 19, 26;
+  --bg-color: rgba(var(--bg-color-raw), 0.75);
+  --text-primary: #ffffff;
+  --text-secondary: #9aa0b9;
+  --theme-color: #3b82f6;
+  --theme-color-glow: rgba(59, 130, 246, 0.25);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --clock-font: 'Orbitron', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body {
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px; /* Room for shadow */
+}
+
+/* Frameless Window Card */
+.widget-card {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-color);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px var(--theme-color-glow);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  -webkit-app-region: drag; /* Draggable by default */
+}
+
+body.hovered .widget-card {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px var(--theme-color-glow);
+}
+
+/* Animated Water Wave Backdrop */
+.wave-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 1s ease-out; /* Smooth transition for height changes */
+  overflow: hidden;
+  transform: translateY(75%); /* Default starting wave level (25% filled) */
+}
+
+.wave-svg {
+  width: 200%; /* Wider than container to allow smooth scrolling */
+  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.floating-wave-bg {
+  animation: floating-wave-motion 10s linear infinite;
+  transform-origin: center bottom;
+}
+
+.floating-wave-fg {
+  animation: floating-wave-motion-reverse 6s linear infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes floating-wave-motion {
+  0% {
+    transform: translateX(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(-25%) scaleY(1.1);
+  }
+  100% {
+    transform: translateX(-50%) scaleY(1);
+  }
+}
+
+@keyframes floating-wave-motion-reverse {
+  0% {
+    transform: translateX(-50%) scaleY(1);
+  }
+  50% {
+    transform: translateX(-25%) scaleY(0.9);
+  }
+  100% {
+    transform: translateX(0) scaleY(1);
+  }
+}
+
+/* Top Action bar (Hidden by default, shown on hover) */
+.action-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 32px;
+  background: linear-gradient(to bottom, rgba(var(--bg-color-raw), 0.9) 70%, transparent 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-app-region: drag;
+}
+
+body.hovered .action-bar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.drag-handle {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  cursor: grab;
+}
+
+.window-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+}
+
+.bar-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  -webkit-app-region: no-drag; /* Interactive controls must be clickable */
+}
+
+.control-btn:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.close-btn {
+  font-size: 16px;
+}
+
+.close-btn:hover {
+  background-color: rgba(239, 68, 68, 0.25);
+  color: #ef4444;
+}
+
+/* Locked class: removes draggability */
+.widget-card.locked {
+  -webkit-app-region: no-drag;
+}
+.widget-card.locked .action-bar {
+  -webkit-app-region: no-drag;
+}
+.widget-card.locked .drag-handle {
+  display: none;
+}
+
+/* Main Content Area */
+.widget-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  padding: 10px 15px;
+  margin-top: 10px; /* Offset for hidden action bar */
+}
+
+/* View panel standard */
+.view-panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.view-panel.hidden {
+  display: none !important;
+}
+
+/* SIMPLE CLOCK STYLE */
+.digital-clock {
+  font-family: var(--clock-font);
+  font-size: 34px;
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--theme-color-glow);
+  color: var(--text-primary);
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.date-display {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* COUNTDOWN TIMER STYLE */
+.timer-setup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.timer-inputs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  -webkit-app-region: no-drag;
+}
+
+.input-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.input-col input {
+  width: 44px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  text-align: center;
+  font-family: var(--clock-font);
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-col input:focus {
+  border-color: var(--theme-color);
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 8px var(--theme-color-glow);
+}
+
+/* Hide input spin buttons */
+.input-col input::-webkit-outer-spin-button,
+.input-col input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-col span {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.input-colon {
+  font-family: var(--clock-font);
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: -12px;
+}
+
+.start-timer-btn {
+  background-color: var(--theme-color);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 6px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-app-region: no-drag;
+}
+
+.start-timer-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--theme-color-glow);
+  opacity: 0.95;
+}
+
+.timer-run {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timer-display {
+  font-family: var(--clock-font);
+  font-size: 36px;
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--theme-color-glow);
+  line-height: 1.1;
+}
+
+/* Shared controls bar at bottom of run states */
+.timer-actions, .stopwatch-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.25s ease;
+  -webkit-app-region: no-drag;
+}
+
+body.hovered .timer-actions,
+body.hovered .stopwatch-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.action-circle-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.action-circle-btn:hover {
+  background-color: var(--theme-color);
+  border-color: var(--theme-color);
+  transform: scale(1.1);
+  box-shadow: 0 0 8px var(--theme-color-glow);
+}
+
+.action-circle-btn.reset:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--text-primary);
+  box-shadow: none;
+}
+
+/* STOPWATCH STYLE */
+.stopwatch-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stopwatch-display {
+  font-family: var(--clock-font);
+  font-size: 34px;
+  font-weight: 600;
+  text-shadow: 0 0 10px var(--theme-color-glow);
+  line-height: 1.1;
+}
+
+#sw-ms {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+/* Lap List styling */
+.lap-container {
+  width: 100%;
+  margin-top: 12px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 6px;
+  max-height: 70px;
+  overflow-y: auto;
+  -webkit-app-region: no-drag;
+}
+
+/* Custom scrollbar for laps */
+.lap-container::-webkit-scrollbar {
+  width: 3px;
+}
+.lap-container::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+.laps-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  padding: 0 4px;
+}
+
+.laps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.lap-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-family: var(--clock-font);
+  color: var(--text-primary);
+  padding: 2px 4px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.lap-item:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Alarm flashing animation when Timer finishes */
+@keyframes alarm-flash {
+  0%, 100% {
+    background-color: rgba(239, 68, 68, 0.8);
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+    border-color: #ef4444;
+  }
+  50% {
+    background-color: rgba(18, 19, 26, 0.85);
+    box-shadow: none;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.widget-card.alarm-active {
+  animation: alarm-flash 0.8s infinite;
+}

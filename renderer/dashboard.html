@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Floating Clock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-container">
+        <div class="logo-circle">
+          <svg viewBox="0 0 100 100" class="logo-svg">
+            <!-- Clock circle background -->
+            <circle cx="50" cy="50" r="42" stroke="var(--theme-color-glow)" stroke-width="4" fill="none" class="clock-outer-ring" />
+            <!-- Water Wave Path -->
+            <path d="M 8 50 Q 29 42, 50 50 T 92 50 L 92 92 L 8 92 Z" fill="#3b82f6" class="wave-bg" />
+            <path d="M 8 50 Q 29 58, 50 50 T 92 50 L 92 92 L 8 92 Z" fill="#60a5fa" opacity="0.6" class="wave-fg" />
+            <!-- Clock Hands -->
+            <line x1="50" y1="50" x2="50" y2="28" stroke="white" stroke-width="4" stroke-linecap="round" class="clock-hand hour-hand" />
+            <line x1="50" y1="50" x2="68" y2="50" stroke="white" stroke-width="4" stroke-linecap="round" class="clock-hand minute-hand" />
+            <!-- Clock Center pin -->
+            <circle cx="50" cy="50" r="3" fill="white" />
+          </svg>
+        </div>
+      </div>
+      <h1 class="app-title">Floating Clock</h1>
+      <p class="app-subtitle">Clock that floats on your screen</p>
+    </header>
+
+    <!-- Main Navigation Menu -->
+    <main class="menu-list">
+      <!-- Simple Clock -->
+      <button class="menu-item" id="btn-clock" data-type="clock">
+        <div class="menu-icon-wrapper">
+          <svg viewBox="0 0 24 24" class="menu-icon">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+            <polyline points="12 6 12 12 16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Simple Clock</div>
+          <div class="menu-desc">Just a simple digital clock.</div>
+        </div>
+        <div class="status-indicator" id="status-clock"></div>
+      </button>
+
+      <!-- Countdown Timer -->
+      <button class="menu-item" id="btn-timer" data-type="timer">
+        <div class="menu-icon-wrapper">
+          <svg viewBox="0 0 24 24" class="menu-icon">
+            <path d="M5 2h14M5 22h14M19 2v4a7 7 0 0 1-3.3 5.9L12 15l-3.7-3.1A7 7 0 0 1 5 6V2M5 22v-4a7 7 0 0 1 3.3-5.9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 15l-3.7-3.1" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M12 15l3.3-2.9" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Countdown Timer</div>
+          <div class="menu-desc">Set the duration and count it down.</div>
+        </div>
+        <div class="status-indicator" id="status-timer"></div>
+      </button>
+
+      <!-- Stopwatch -->
+      <button class="menu-item" id="btn-stopwatch" data-type="stopwatch">
+        <div class="menu-icon-wrapper">
+          <svg viewBox="0 0 24 24" class="menu-icon">
+            <circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2" fill="none"/>
+            <line x1="12" y1="5" x2="12" y2="2" stroke="currentColor" stroke-width="2"/>
+            <line x1="10" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="2"/>
+            <polyline points="12 9 12 13 15 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Stopwatch</div>
+          <div class="menu-desc">Measure how long does it take.</div>
+        </div>
+        <div class="status-indicator" id="status-stopwatch"></div>
+      </button>
+
+      <!-- Settings Toggle -->
+      <button class="menu-item" id="btn-settings-toggle">
+        <div class="menu-icon-wrapper">
+          <svg viewBox="0 0 24 24" class="menu-icon">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">Settings</div>
+          <div class="menu-desc">Adjust app behavior & system settings.</div>
+        </div>
+      </button>
+
+      <!-- About -->
+      <button class="menu-item" id="btn-about-toggle">
+        <div class="menu-icon-wrapper">
+          <svg viewBox="0 0 24 24" class="menu-icon">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+            <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="menu-text">
+          <div class="menu-title">About</div>
+          <div class="menu-desc">Learn more about the application.</div>
+        </div>
+      </button>
+    </main>
+
+    <!-- Slide-up settings drawer -->
+    <div class="drawer" id="settings-drawer">
+      <div class="drawer-header">
+        <h2>App Settings</h2>
+        <button class="close-drawer" id="close-settings">&times;</button>
+      </div>
+      <div class="drawer-content">
+        <!-- Theme Colors -->
+        <div class="setting-group">
+          <label>Theme Color Accent</label>
+          <div class="color-options">
+            <div class="color-dot active" data-color="#3b82f6" style="background-color: #3b82f6;"></div> <!-- Blue -->
+            <div class="color-dot" data-color="#10b981" style="background-color: #10b981;"></div> <!-- Green -->
+            <div class="color-dot" data-color="#ef4444" style="background-color: #ef4444;"></div> <!-- Red -->
+            <div class="color-dot" data-color="#f59e0b" style="background-color: #f59e0b;"></div> <!-- Orange -->
+            <div class="color-dot" data-color="#ec4899" style="background-color: #ec4899;"></div> <!-- Pink -->
+            <div class="color-dot" data-color="#8b5cf6" style="background-color: #8b5cf6;"></div> <!-- Purple -->
+          </div>
+        </div>
+
+        <!-- Clock Font Selection -->
+        <div class="setting-group">
+          <label for="font-select">Digital Clock Font</label>
+          <select id="font-select" class="form-select">
+            <option value="Orbitron">Orbitron (Modern Tech)</option>
+            <option value="Share Tech Mono">Share Tech Mono (Retro Terminal)</option>
+            <option value="Inter">Inter (Sleek Minimal)</option>
+            <option value="'Courier New', Courier, monospace">Courier New (Classic Mono)</option>
+          </select>
+        </div>
+
+        <!-- Time Format -->
+        <div class="setting-group toggle-group">
+          <div class="toggle-text">
+            <label>Use 24-Hour Format</label>
+            <span class="setting-desc">Switch from standard 12h clock</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="chk-24h">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Seconds Display -->
+        <div class="setting-group toggle-group">
+          <div class="toggle-text">
+            <label>Show Seconds</label>
+            <span class="setting-desc">Display seconds on widgets</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="chk-seconds" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Opacity Slider -->
+        <div class="setting-groupRange">
+          <div class="range-labels">
+            <label>Floating Window Opacity</label>
+            <span id="opacity-val">90%</span>
+          </div>
+          <input type="range" id="range-opacity" min="40" max="100" value="90" class="form-range">
+        </div>
+
+        <!-- Wave animation config -->
+        <div class="setting-group toggle-group">
+          <div class="toggle-text">
+            <label>Enable Wave Animation</label>
+            <span class="setting-desc">Animate the water inside widgets</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="chk-wave" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide-up about drawer -->
+    <div class="drawer" id="about-drawer">
+      <div class="drawer-header">
+        <h2>About</h2>
+        <button class="close-drawer" id="close-about">&times;</button>
+      </div>
+      <div class="drawer-content about-content">
+        <div class="about-logo">
+          <svg viewBox="0 0 100 100" class="logo-svg" style="width: 80px; height: 80px;">
+            <circle cx="50" cy="50" r="42" stroke="#3b82f6" stroke-width="4" fill="none" />
+            <path d="M 8 50 Q 29 42, 50 50 T 92 50 L 92 92 L 8 92 Z" fill="#3b82f6" />
+            <line x1="50" y1="50" x2="50" y2="28" stroke="white" stroke-width="4" stroke-linecap="round" />
+            <line x1="50" y1="50" x2="68" y2="50" stroke="white" stroke-width="4" stroke-linecap="round" />
+            <circle cx="50" cy="50" r="3" fill="white" />
+          </svg>
+        </div>
+        <h3>Floating Clock</h3>
+        <p class="version">v1.0.0</p>
+        <p class="about-desc">
+          A sleek, beautiful desktop utility that brings customizable floating widgets to your workspace. Perfect for tracking time, timing tasks, and run stopwatches while playing games or working on other applications.
+        </p>
+        <div class="about-features">
+          <div class="feature-tag">Always on Top</div>
+          <div class="feature-tag">Frameless</div>
+          <div class="feature-tag">Customizable</div>
+          <div class="feature-tag">Transparent</div>
+        </div>
+        <p class="copyright">&copy; 2026 Antigravity. Designed with premium aesthetics.</p>
+      </div>
+    </div>
+
+    <!-- Backdrop overlay for drawers -->
+    <div class="overlay" id="drawer-overlay"></div>
+  </div>
+  <script src="dashboard.js"></script>
+</body>
+</html>
